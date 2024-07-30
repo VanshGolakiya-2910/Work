@@ -18,3 +18,12 @@ $(".inputTxt").bind("keypress keyup keydown", function (event) {
             break;
     }
 });
+
+
+// The rough code of backspace event key.
+note.addEventListener('keydown', function(event) {
+    const key = event.key; // const {key} = event; ES6+
+    if (key === "Backspace") {
+        // Do something
+    }
+});
