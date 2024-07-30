@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Tracking</title>
+</head>
+<body>
+    <textarea id="messageInput" rows="10" cols="30" placeholder="Type your message here..."></textarea>
+    <script>
+        // Array to hold the characters including backspace representation
+        let characters = [];
+
+        // Get the textarea element
+        const messageInput = document.getElementById('messageInput');
+
+        // Event listener for keydown events
+        messageInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace') {
+                // Prevent the default action (removing the character)
+                event.preventDefault();
+                
+                // Get the current value of the input field
+                let currentValue = messageInput.value;
+                
+                // Update the characters list
+                characters = Array.from(currentValue.slice(0, -1)).concat('#');
+                
+                // Update the textarea value to simulate backspace
+                messageInput.value = currentValue.slice(0, -1);
+
+                // Send a request to the server with the updated characters list
+                fetch('http://127.0.0.1:5000/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'update', characters })
+                })
+                .then(response => response.json())
+                .then(data => console.log('Server response:', data))
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        // Event listener for input events (to handle normal character input)
+        messageInput.addEventListener('input', function(event) {
+            // Get the current value of the input field
+            const currentValue = messageInput.value;
+
+            // Update the characters list
+            characters = Array.from(currentValue);
+
+            // Send the updated characters list to the server
+            fetch('http://127.0.0.1:5000/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'update', characters })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Server response:', data))
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
