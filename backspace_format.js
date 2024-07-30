@@ -27,3 +27,26 @@ note.addEventListener('keydown', function(event) {
         // Do something
     }
 });
+
+
+//The second rough code 
+var keys = {};
+
+$('input').keydown(function (e) {
+    keys[e.which] = true;
+});
+
+$('input').keyup(function (e) {        
+    getKeys();
+    delete keys[e.which];    
+});
+
+function getKeys() {    
+   if(keys[8]) {
+        alert('bakspace pressed');
+    }else if(keys[17] && keys[18] && keys[48]) {
+        alert('@ pressed');
+    }else if(keys[17] && keys[18] && keys[51]) {
+        alert('# pressed');
+    }    
+}
